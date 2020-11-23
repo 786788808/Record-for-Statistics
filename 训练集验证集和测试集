@@ -1,3 +1,0 @@
-在建模的时候，看别人代码的时候经常遇到训练集、验证集、测试集，或者训练集、测试集，或者交叉验证，巴拉巴拉。为什么验证集好像经常没被用上？  
-难道是因为存在感较低？  
-![](https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605986143297&di=0ea25d973ece9f67f71be9cccfbe6ad2&imgtype=0&src=http%3A%2F%2Fpic1.zhimg.com%2Fv2-d3cfabdab629b9e7494c588d2fdfc8e4_b.jpg)
