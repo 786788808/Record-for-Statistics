@@ -1,9 +1,8 @@
-建模后，我们总想知道这个模型好不好，泛化能力如何。而泛化误差就是用来衡量模型泛化能力的。  
-![](https://pic4.zhimg.com/80/v2-286539c808d9a429e69fd59fe33a16dd_720w.jpg?source=1940ef5c)
-E_d[(y_d - f_d(x))^2] &=E_d[(y_d -\bar{f(x)} + \bar{f(x)} - f_d(x))^2]\\ 
-	&= E_d[(y_d -\bar{f(x)})^2] +  E_d[(\bar{f(x)}-f_d(x))^2] +0\\
-	&= E_d[(y_d -\bar{f(x)})^2] +  E_d[(\bar{f(x)}-f_d(x))^2] \\
-	&= E_d[(y_d -y+y -\bar{f(x)})^2] + E_d[(\bar{f(x)}-f_d(x))^2]\\
-	&= E_d[(y_d -y)^2] + E_d[(y -\bar{f(x)})^2] + 0 + E_d[(\bar{f(x)}-f_d(x))^2]\\
-	&= E_d[(y_d -y)^2] + E_d[(y -\bar{f(x)})^2]  + E_d[(\bar{f(x)}-f_d(x))^2]\\
-	&= \epsilon^2 + bias^2+ var
+建模后，我们总想知道这个模型好不好，泛化能力如何。而泛化误差就是用来衡量模型泛化能力的。   
+参考下图及一个blog:https://blog.csdn.net/Cerisier/article/details/78122653  
+![](https://pic4.zhimg.com/80/v2-286539c808d9a429e69fd59fe33a16dd_720w.jpg?source=1940ef5c)  
+由上面大神的推导可知，泛化误差 = 随机误差^2 + 偏差^2 + 方差（随机误差基本为0）  
+That is to say, 随机误差主要由偏差和方差构成。  
+从上图可以看到，随着模型复杂度的增加，偏差会逐渐减小，但是方差会增大，这是过拟合现象。而如果模型复杂度很小，偏差很大，方差很小，这是欠拟合的表现。  
+从根本来看，Bias与Variance往往是不能兼得的。
+
