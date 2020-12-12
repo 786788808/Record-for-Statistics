@@ -73,7 +73,7 @@ https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_sco
 ### 四. 举栗子：
 下面用sklearn的make_blobs方法来生成聚类算法的测试数据：  
 
-
+![](https://ftp.bmp.ovh/imgs/2020/12/d86e67bd4505ae37.png)
 
 
 
