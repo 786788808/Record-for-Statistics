@@ -73,7 +73,79 @@ https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_sco
 ### 四. 举栗子：
 下面用sklearn的make_blobs方法来生成聚类算法的测试数据：  
 
-![](https://ftp.bmp.ovh/imgs/2020/12/d86e67bd4505ae37.png)
+![](https://ftp.bmp.ovh/imgs/2020/12/169871e487d9afb4.png)
+(4.1) 手肘法
+![](https://ftp.bmp.ovh/imgs/2020/12/09adde7a83911ce0.png)
+
+
+```
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
+from sklearn.datasets import make_blobs  # 生成聚类数据
+from sklearn.cluster import KMeans
+from sklearn import metrics
+
+
+X, Y = make_blobs(n_samples=10000,  # 设置样本量
+                  n_features=2,  # 设置样本特征个数
+                  centers=[[-2, -3], [0, 2], [6, 0], [5, 6]],  # 设置簇的中心，从而也知道了簇/类的个数
+                  cluster_std=[0.5, 0.4, 0.6, 0.6],  # 设置簇的方差
+                  random_state=20)
+plt.scatter(X[:, 0], X[:, 1], marker='o', c=Y)
+plt.grid()
+plt.show()
+
+# 1.手肘法
+SSE = []
+for k in range(1, 10):
+    model = KMeans(n_clusters=k)  # 构造聚类器
+    model.fit(X)
+    SSE.append(model.inertia_)  # estimator.inertia_获取聚类准则的总和
+x_1 = range(1, 10)
+plt.xlabel('k值')
+plt.ylabel('SSE')
+plt.plot(x_1, SSE, 'o-')
+plt.show()
+
+# 2.
+
+
+
+# 3.轮廓系数Silhouette Coefficient
+Silhouette_coeff = []
+for k in range(2, 10):
+    model_3 = KMeans(n_clusters=k, random_state=666).fit(X)
+    y3_pred = model_3.labels_
+    sh_score = metrics.silhouette_score(X, y3_pred, metric='euclidean')
+    Silhouette_coeff.append(sh_score)
+    #print(a)
+    # print('k={}时的轮廓系数：'.format(k),a)
+# print(Silhouette_coeff)
+plt.plot(range(2, 10), Silhouette_coeff, 'o-')
+plt.show()
+
+# 4.Calinski-Harabasz Index 即(CH)指标
+CH_score = []
+plt.figure(figsize=(12, 12))
+for i in range(1, 10):
+    y4_pred = KMeans(n_clusters=i+1, random_state=666).fit_predict(X)
+    plt.subplot(3,3,i)
+    plt.scatter(X[:, 0], X[:, 1], c=y4_pred)
+    plt.suptitle('k值:2-10')
+    plt.show()
+    CH_score.append(metrics.calinski_harabasz_score(X, y4_pred))
+print('CH分数:')
+# print('最佳k值：%d, 最大CH_score：%d'% (CH_score.index(max(CH_score)), max(CH_score)))
+print(CH_score)
+plt.plot(range(2,11), CH_score, 'o-')
+plt.show()
+```
+
+
+
+
 
 
 
