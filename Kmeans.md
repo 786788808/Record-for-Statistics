@@ -33,7 +33,7 @@ K-Means 聚类采用距离作为相似性的评价指标，即认为两个对象
 >
 #### (3.2) 手肘法Elbow method——看图辨别拐点   
 尝试不同的K值，并且计算对应的集合内误差平方和:Within Set Sum of Squared Error(WSSSE)或者SSE(sum of the squared errors，误差平方和)，都是一样的。
-![](https://img-blog.csdnimg.cn/20200625090044914.png)  
+![](https://ftp.bmp.ovh/imgs/2020/12/d8205cecb29c6e47.png)  
 - (3.2.1) SSE参数解释：  
 > Ci是第i个簇  
 > p是Ci中的样本点  
@@ -46,7 +46,7 @@ SSE=所有的蓝色的线的平方加起来。假设样本数量为n，当k=1，
 SSE随着聚类数目增多而不断减小，并且SSE会由变化很快到最后平缓下来，当SSE减少得很缓慢时，就认为进一步增大聚类数效果也聚类效果也没有太明显的变化。关注斜率最大处，一个明显的“肘点”就是最佳聚类数目。
 - (3.2.3) 举例SSE图表示：
 ![](https://pic2.zhimg.com/v2-25b396108e9b5da6094c2097888f2251_b.png)   
-此时，当k=3斜率最大，所以选k=3。  
+此时，选k=3。  
 >
 #### (3.3) Gap statistic   
 上述手肘法Elbow method需要人眼去观察最佳值，从而更智能的Gap statistic方法推出。只需要找出使Gap Statistic最大的K值即可。
