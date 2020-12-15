@@ -49,7 +49,7 @@ SSE随着聚类数目增多而不断减小，并且SSE会由变化很快到最�
 此时，选k=3。  
 >
 #### (3.3) Gap statistic   
-上述手肘法Elbow method需要人眼去观察最佳值，从而更智能的Gap statistic方法推出。只需要找出使Gap Statistic最大的K值即可。
+上述手肘法Elbow method需要人眼去观察最佳值，有时并不能确切看出哪个值是真正的拐点，后来有斯坦福大佬推出更智能的Gap statistic方法。只需要找出使Gap Statistic最大的K值即可。
 [安装包位置](https://www.cnpython.com/pypi/gapkmean)
 >
 #### (3.4) 轮廓系数Silhouette Coefficient
@@ -63,22 +63,22 @@ SSE随着聚类数目增多而不断减小，并且SSE会由变化很快到最�
 用法参考：sklearn.metrics.silhouette_score
 >
 #### (3.5) Calinski-Harabasz Index 即(CH)指标  
-同样也是以簇内的稠密程度和簇间的离散程度来评估聚类的效果，选择使Calinski-Harabasz分数较大对应的k值
+同样也是以簇内的稠密程度和簇间的离散程度来评估聚类的效果，选择使Calinski-Harabasz分数较大对应的k值。其计算速度快很多。
 公式：![](https://ftp.bmp.ovh/imgs/2020/12/692a7a67f082412e.png)  
 其中，m为训练集样本数，k为类别数。Bk为类别之间的协方差矩阵，Wk为类别内部数据的协方差矩阵。tr为矩阵的迹。
 类别内部数据的协方差越小越好，类别之间的协方差越大越好，这样的Calinski-Harabasz分数会高。  
-\[用法参考]sklearn.metrics.calinski_harabaz_score]
+\[用法参考：sklearn.metrics.calinski_harabaz_score]
 (https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html)
 >
 ### 四. 举栗子：
 下面用sklearn的make_blobs方法来生成聚类算法的测试数据：  
-
-![](https://ftp.bmp.ovh/imgs/2020/12/169871e487d9afb4.png)
-(4.1) 手肘法
-![](https://ftp.bmp.ovh/imgs/2020/12/09adde7a83911ce0.png)
-
-
+先生成模拟数据：  
 ```
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# @FileName: github_kmeans.py
+# @Software: PyCharm
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -87,7 +87,6 @@ from sklearn.datasets import make_blobs  # 生成聚类数据
 from sklearn.cluster import KMeans
 from sklearn import metrics
 
-
 X, Y = make_blobs(n_samples=10000,  # 设置样本量
                   n_features=2,  # 设置样本特征个数
                   centers=[[-2, -3], [0, 2], [6, 0], [5, 6]],  # 设置簇的中心，从而也知道了簇/类的个数
@@ -95,8 +94,13 @@ X, Y = make_blobs(n_samples=10000,  # 设置样本量
                   random_state=20)
 plt.scatter(X[:, 0], X[:, 1], marker='o', c=Y)
 plt.grid()
+plt.title('模拟数据')
 plt.show()
-
+```
+![](https://ftp.bmp.ovh/imgs/2020/12/d9ddc76ba2990827.png)  
+>
+#### (4.1) 手肘法
+```
 # 1.手肘法
 SSE = []
 for k in range(1, 10):
@@ -107,41 +111,67 @@ x_1 = range(1, 10)
 plt.xlabel('k值')
 plt.ylabel('SSE')
 plt.plot(x_1, SSE, 'o-')
+plt.title('手肘法——寻找拐点')
 plt.show()
-
-# 2.
-
-
-
+```
+![](https://ftp.bmp.ovh/imgs/2020/12/b596387822666121.png)  
+>
+#### (4.2) Gap statistic
+```
+# 2.Gap statistic
+# # 后续补
+```
+>
+#### (4.3) 轮廓系数Silhouette Coefficient
+```
 # 3.轮廓系数Silhouette Coefficient
-Silhouette_coeff = []
+Silhouette_Coeff = []
 for k in range(2, 10):
     model_3 = KMeans(n_clusters=k, random_state=666).fit(X)
     y3_pred = model_3.labels_
     sh_score = metrics.silhouette_score(X, y3_pred, metric='euclidean')
-    Silhouette_coeff.append(sh_score)
-    #print(a)
-    # print('k={}时的轮廓系数：'.format(k),a)
-# print(Silhouette_coeff)
-plt.plot(range(2, 10), Silhouette_coeff, 'o-')
-plt.show()
-
-# 4.Calinski-Harabasz Index 即(CH)指标
-CH_score = []
-plt.figure(figsize=(12, 12))
-for i in range(1, 10):
-    y4_pred = KMeans(n_clusters=i+1, random_state=666).fit_predict(X)
-    plt.subplot(3,3,i)
-    plt.scatter(X[:, 0], X[:, 1], c=y4_pred)
-    plt.suptitle('k值:2-10')
-    plt.show()
-    CH_score.append(metrics.calinski_harabasz_score(X, y4_pred))
-print('CH分数:')
-# print('最佳k值：%d, 最大CH_score：%d'% (CH_score.index(max(CH_score)), max(CH_score)))
-print(CH_score)
-plt.plot(range(2,11), CH_score, 'o-')
+    Silhouette_Coeff.append(sh_score)
+# print(Silhouette_Coeff)
+plt.plot(range(2, 10), Silhouette_Coeff, 'o-')
+plt.title('轮廓系数——寻找最接近1的点')
 plt.show()
 ```
+![](https://ftp.bmp.ovh/imgs/2020/12/c149b19d6a602f12.png)  
+>
+#### (4.4) Calinski-Harabasz Index，(CH)指标
+```
+# 4.Calinski-Harabasz Index 即(CH)指标
+CH_Score = []
+for i in range(1, 10):
+    y4_pred = KMeans(n_clusters=i+1, random_state=666).fit_predict(X)
+    # plt.subplot(3,3,i)
+    # plt.scatter(X[:, 0], X[:, 1], c=y4_pred)
+    # plt.suptitle('k值:2-10')
+    # plt.show()
+    CH_Score.append(metrics.calinski_harabasz_score(X, y4_pred))
+print('CH分数:\n', CH_Score)
+plt.plot(range(2,11), CH_Score, 'o-')
+plt.title('CH指标——寻找最大值')
+plt.show()
+```
+![](https://ftp.bmp.ovh/imgs/2020/12/09f9cedd34d37156.png)  
+>
+
+### 五. 总结：
+#### (5.1) 本文选取K值的评判标准仅是其中几个，后面可深挖不同指标的类别
+#### (5.2) Kmeans聚类的结果因初始质心的选择问题，避免不了局部最优，实际中多聚类几次，用最好的结果更可靠
+#### (5.3) Gap statistic的实现方法还没整理出来，(CH)指标的计算速度相对轮廓系数快，数据量很大时择(CH)指标更合适
+
+如有错误，欢迎指错，谢谢各位大佬  
+![](https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1608021441542&di=3e0b00c230f1eac1f1be61e632298caf&imgtype=0&src=http%3A%2F%2Fsearchfoto.ru%2Fimg%2FxyygpKbDS1y8pTjXUy83VS8rMS9fLSy3RL8nQz0zR9_cM0AtLNfH0dQ9JqUgx8NXNz7KwTClzSy93BAL7clsjYwO1xNwC6wxbQ3MIq6jY1hDMKEjOsU0BAzA339YUIpyZYmuoZwgA.jpg)
+
+
+
+
+
+
+
+
 
 
 
