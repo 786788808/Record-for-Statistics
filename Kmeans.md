@@ -41,9 +41,9 @@ K-Means 聚类采用距离作为相似性的评价指标，即认为两个对象
 > SSE是所有样本的聚类误差，代表了聚类效果的好坏。  
 - (3.2.2) SSE图解释：  
 ![](https://ftp.bmp.ovh/imgs/2020/12/8a110f66530ac3d8.png)
-![](https://ftp.bmp.ovh/imgs/2020/12/a14c3c4c783d1f20.png)
-SSE=所有的蓝色的线的平方加起来。假设样本数量为n，当k=1，SSE最大；当k=n，SSE达到最小，SSE=0。
-SSE随着聚类数目增多而不断减小，并且SSE会由变化很快到最后平缓下来，当SSE减少得很缓慢时，就认为进一步增大聚类数效果也聚类效果也没有太明显的变化。关注斜率最大处，一个明显的“肘点”就是最佳聚类数目。
+![](https://ftp.bmp.ovh/imgs/2020/12/a14c3c4c783d1f20.png)  
+SSE=所有的蓝色的线的平方加起来。假设样本数量为n，当k=1，SSE最大；当k=n，SSE达到最小，SSE=0。  
+SSE随着聚类数目增多而不断减小，并且SSE会由变化很快到最后平缓下来，当SSE减少得很缓慢时，就认为进一步增大聚类数效果也聚类效果也没有太明显的变化。关注斜率最大处，一个明显的“肘点”就是最佳聚类数目。  
 - (3.2.3) 举例SSE图表示：
 ![](https://pic2.zhimg.com/v2-25b396108e9b5da6094c2097888f2251_b.png)   
 此时，选k=3。  
@@ -67,7 +67,7 @@ SSE随着聚类数目增多而不断减小，并且SSE会由变化很快到最�
 公式：![](https://ftp.bmp.ovh/imgs/2020/12/692a7a67f082412e.png)  
 其中，m为训练集样本数，k为类别数。Bk为类别之间的协方差矩阵，Wk为类别内部数据的协方差矩阵。tr为矩阵的迹。
 类别内部数据的协方差越小越好，类别之间的协方差越大越好，这样的Calinski-Harabasz分数会高。  
-[用法参考](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html)sklearn.metrics.calinski_harabaz_score
+[用法参考sklearn.metrics.calinski_harabaz_score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html)  
 
 >
 ### 四. 举栗子：
