@@ -67,8 +67,8 @@ SSE随着聚类数目增多而不断减小，并且SSE会由变化很快到最�
 公式：![](https://ftp.bmp.ovh/imgs/2020/12/692a7a67f082412e.png)  
 其中，m为训练集样本数，k为类别数。Bk为类别之间的协方差矩阵，Wk为类别内部数据的协方差矩阵。tr为矩阵的迹。
 类别内部数据的协方差越小越好，类别之间的协方差越大越好，这样的Calinski-Harabasz分数会高。  
-\[用法参考：sklearn.metrics.calinski_harabaz_score]
-(https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html)
+[用法参考](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html)sklearn.metrics.calinski_harabaz_score
+
 >
 ### 四. 举栗子：
 下面用sklearn的make_blobs方法来生成聚类算法的测试数据：  
