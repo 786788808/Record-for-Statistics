@@ -24,7 +24,7 @@ K-Means 聚类采用距离作为相似性的评价指标，即认为两个对象
 >
 #### (2.3) 改善方法：  
 - 初始选择质心问题：针对最初随机选取 k 个质心可能使收敛变慢、模型效果不佳问题，因此推出 K-Means++ 算法，其优化了初始质心的选择，更合理去选择，从而优化模型。scikit-learn 默认使用 K-Means++ 算法，也可调回 random ，变回最原始的算法。
-- 计算速度优化——1：传统的K-Means需要不断计算所有点到质心的距离，新的elkan K-Means利用三角形性质：两边之和大于等于第三边,以及两边之差小于第三边，来减少距离的计算，有效提高迭代速度。针对稠密数据可用，若是稀疏数据，有缺失值，该方法行不通，只能用回原来的距离计算方法。详见大神博客：https://www.cnblogs.com/pinard/p/6164214.html
+- 计算速度优化——1：传统的K-Means需要不断计算所有点到质心的距离，新的elkan K-Means利用三角形性质：两边之和大于等于第三边,以及两边之差小于第三边，来减少距离的计算，有效提高迭代速度。针对稠密数据可用，若是稀疏数据，有缺失值，该方法行不通，只能用回原来的距离计算方法。[详见大神博客](https://www.cnblogs.com/pinard/p/6164214.html)
 - 计算速度优化——2：样本量很大的话，也需要消耗较长计算时间，比如样本量达到10万、特征有100以上，可以考虑用Mini Batch K-Means。它以抽样的方式选出样本再计算，可以减少计算量，提高迭代速度。这会牺牲掉一定的精度，为了增加算法的准确性，一般会多跑几次，用得到不同的随机采样集来得到聚类簇，选择其中最优的聚类簇。
 >
 ### 三. k值确定：
@@ -50,7 +50,7 @@ SSE随着聚类数目增多而不断减小，并且SSE会由变化很快到最�
 >
 #### (3.3) Gap statistic   
 上述手肘法Elbow method需要人眼去观察最佳值，从而更智能的Gap statistic方法推出。只需要找出使Gap Statistic最大的K值即可。
-安装包位置：https://www.cnpython.com/pypi/gapkmean
+[安装包位置](https://www.cnpython.com/pypi/gapkmean)
 >
 #### (3.4) 轮廓系数Silhouette Coefficient
 以簇内的稠密程度和簇间的离散程度来评估聚类的效果，选择使轮廓系数较大对应的k值。用法参考：sklearn.metrics.silhouette_score
@@ -67,8 +67,8 @@ SSE随着聚类数目增多而不断减小，并且SSE会由变化很快到最�
 公式：![](https://ftp.bmp.ovh/imgs/2020/12/692a7a67f082412e.png)  
 其中，m为训练集样本数，k为类别数。Bk为类别之间的协方差矩阵，Wk为类别内部数据的协方差矩阵。tr为矩阵的迹。
 类别内部数据的协方差越小越好，类别之间的协方差越大越好，这样的Calinski-Harabasz分数会高。  
-用法参考：sklearn.metrics.calinski_harabaz_score
-https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html
+\[用法参考]sklearn.metrics.calinski_harabaz_score]
+(https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html)
 >
 ### 四. 举栗子：
 下面用sklearn的make_blobs方法来生成聚类算法的测试数据：  
