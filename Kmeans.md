@@ -32,7 +32,7 @@ K-Means 聚类采用距离作为相似性的评价指标，即认为两个对象
 比如，做客户分层，你想分成4部分，那么k值就取你想要的4。
 >
 #### (3.2) 手肘法Elbow method——看图辨别拐点   
-尝试不同的K值，并且计算对应的集合内误差平方和:Within Set Sum of Squared Error(WSSSE)或者SSE(sum of the squared errors，误差平方和)，都是一样的。
+尝试不同的K值，并且计算对应的集合内误差平方和:Within Set Sum of Squared Error(WSSSE)或者SSE(sum of the squared errors，误差平方和)，意思都是一样的，在这里都是求所示距离的平方和。
 ![](https://ftp.bmp.ovh/imgs/2020/12/d8205cecb29c6e47.png)  
 - (3.2.1) SSE参数解释：  
 > Ci是第i个簇  
