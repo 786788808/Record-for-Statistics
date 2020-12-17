@@ -1,8 +1,13 @@
 ## 基于密度的聚类算法DBSCAN(Density-Based Spatial Clustering of Applications with Noise)
-基于密度的聚类算法，它们假定聚类结构能通过样本分布的紧密程度确定。通常情况下，密度聚类算法从样本密度的角度来考察样本之间的可连接性，并给予可连接样本不断扩展聚类簇以获得最终的聚类结果。  
+本文介绍基于密度的聚类算法，这类算法假定聚类结构能通过样本分布的紧密程度确定。  
+通常情况下，密度聚类算法从样本密度的角度来考察样本之间的可连接性，并给予可连接样本不断扩展聚类簇以获得最终的聚类结果。  
+
+>
+### 一. DBSCAN基础概念及原理步骤：  
 DBSCAN(具有噪声的基于密度的聚类方法)是其中一种基于密度的聚类算法,  它基于一组邻域参数参数(ϵ, MinPts)来刻画样本分布的紧密程度。   
-可以先到大佬写的网站体验一下聚类效果，[地址](https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/)
-### 一. 原理步骤：  
+
+![](https://ftp.bmp.ovh/imgs/2020/12/1187054a9d252826.png)  
+看了西瓜书、[B站的一个视频(分三节)](https://www.bilibili.com/video/BV1j4411H7xv?p=1)以及一些blog，总结出来
 这是一个循环迭代的算法，简单易懂。假定我们要对 N 个样本观测做聚类：  
 (1) 假设聚为 K 类，并且随机选择 K 个点作为初始中心点；  
 (2) 接下来，按照距离初始中心点最小的原则，把所有观测分到各中心点所在的类中；  
@@ -11,6 +16,11 @@ DBSCAN(具有噪声的基于密度的聚类方法)是其中一种基于密度的
 下图展示最简单的聚类，分 2 类：  
 ![](https://ftp.bmp.ovh/imgs/2020/12/12cb6a37de432746.png)  
 实际情况中，质心一般要迭代多次，才能达到相对最优情况。
+可以以传销的方式去理解整个过程：
+（1）首先，在整个数据集里随机地选取某个点A，然后根据我们设定的标准（半径以及圈内数量），评判A是否能开展一个新簇。假设半径为2、最小数量为4，如果点A达到以上标准，那么可以以它为基础开展一个新簇。
+（2）假设点A圈住了5个点：B C D E F，现在这5个点就要去发展下线了。同样是以上述标准，去看他们能否发展下线。
+（3）不断重复步骤（2），直至没有符合标准的下线了。这就构成了第一个簇C1。
+（4）除了C1中的点，随机选取某个点，看它能否像点A一样去发展一个新簇。
 >
 ### 二. 算法优缺点：
 #### (2.1) 优点：  
@@ -21,13 +31,9 @@ DBSCAN(具有噪声的基于密度的聚类方法)是其中一种基于密度的
 >
 #### (2.2) 缺点：  
 - 当聚类的密度不同或或类间的距离相差很大时，DBSCAN的性能会不如其他算法   
-- 算法涉及两个参数：距离阈值ϵ，邻域样本数阈值MinPts。需要联合调参，不同的参数组合对最后的聚类效果有较大影响。
+- 算法涉及两个参数：距离阈值ϵ，邻域样本数阈值MinPts。需要联合调参，不同的参数组合对最后的聚类效果有较大影响
+- 面对高维数据容易溢出，算起来慢（可以先做降维）
 - 该算法的运行速度要比 KMeans 算法慢一些
->
-#### (2.3) 改善方法：  
-- 初始选择质心问题：针对最初随机选取 k 个质心可能使收敛变慢、模型效果不佳问题，因此推出 K-Means++ 算法，其优化了初始质心的选择，更合理去选择，从而优化模型。scikit-learn 默认使用 K-Means++ 算法，也可调回 random ，变回最原始的算法。
-- 计算速度优化——1：传统的K-Means需要不断计算所有点到质心的距离，新的elkan K-Means利用三角形性质：两边之和大于等于第三边,以及两边之差小于第三边，来减少距离的计算，有效提高迭代速度。针对稠密数据可用，若是稀疏数据，有缺失值，该方法行不通，只能用回原来的距离计算方法。详见大神博客：https://www.cnblogs.com/pinard/p/6164214.html
-- 计算速度优化——2：样本量很大的话，也需要消耗较长计算时间，比如样本量达到10万、特征有100以上，可以考虑用Mini Batch K-Means。它以抽样的方式选出样本再计算，可以减少计算量，提高迭代速度。这会牺牲掉一定的精度，为了增加算法的准确性，一般会多跑几次，用得到不同的随机采样集来得到聚类簇，选择其中最优的聚类簇。
 >
 ### 三. k值确定：
 #### (3.1) 个人需求/经验  
@@ -82,75 +88,12 @@ https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_sco
 
 ```
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
-from sklearn.datasets import make_blobs  # 生成聚类数据
-from sklearn.cluster import KMeans
-from sklearn import metrics
-
-
-X, Y = make_blobs(n_samples=10000,  # 设置样本量
-                  n_features=2,  # 设置样本特征个数
-                  centers=[[-2, -3], [0, 2], [6, 0], [5, 6]],  # 设置簇的中心，从而也知道了簇/类的个数
-                  cluster_std=[0.5, 0.4, 0.6, 0.6],  # 设置簇的方差
-                  random_state=20)
-plt.scatter(X[:, 0], X[:, 1], marker='o', c=Y)
-plt.grid()
-plt.show()
-
-# 1.手肘法
-SSE = []
-for k in range(1, 10):
-    model = KMeans(n_clusters=k)  # 构造聚类器
-    model.fit(X)
-    SSE.append(model.inertia_)  # estimator.inertia_获取聚类准则的总和
-x_1 = range(1, 10)
-plt.xlabel('k值')
-plt.ylabel('SSE')
-plt.plot(x_1, SSE, 'o-')
-plt.show()
-
-# 2.
 
 
 
-# 3.轮廓系数Silhouette Coefficient
-Silhouette_coeff = []
-for k in range(2, 10):
-    model_3 = KMeans(n_clusters=k, random_state=666).fit(X)
-    y3_pred = model_3.labels_
-    sh_score = metrics.silhouette_score(X, y3_pred, metric='euclidean')
-    Silhouette_coeff.append(sh_score)
-    #print(a)
-    # print('k={}时的轮廓系数：'.format(k),a)
-# print(Silhouette_coeff)
-plt.plot(range(2, 10), Silhouette_coeff, 'o-')
-plt.show()
-
-# 4.Calinski-Harabasz Index 即(CH)指标
-CH_score = []
-plt.figure(figsize=(12, 12))
-for i in range(1, 10):
-    y4_pred = KMeans(n_clusters=i+1, random_state=666).fit_predict(X)
-    plt.subplot(3,3,i)
-    plt.scatter(X[:, 0], X[:, 1], c=y4_pred)
-    plt.suptitle('k值:2-10')
-    plt.show()
-    CH_score.append(metrics.calinski_harabasz_score(X, y4_pred))
-print('CH分数:')
-# print('最佳k值：%d, 最大CH_score：%d'% (CH_score.index(max(CH_score)), max(CH_score)))
-print(CH_score)
-plt.plot(range(2,11), CH_score, 'o-')
-plt.show()
-```
-
-
-
-
-
-
-
-
-
-
+参考资料：  
+西瓜书
+[B站视频](https://www.bilibili.com/video/BV1j4411H7xv?p=1)  
+大佬Blog,[(1)](https://www.cnblogs.com/pinard/p/6208966.html)、知乎多个回答
+聚类效果可视化体验(某位外国大佬写的体验网站)[地址](https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/)  
+![](https://ftp.bmp.ovh/imgs/2020/12/1187054a9d252826.png)  
