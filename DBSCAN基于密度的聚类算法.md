@@ -1,3 +1,4 @@
+![](https://ftp.bmp.ovh/imgs/2020/12/1187054a9d252826.png)   
 ## 基于密度的聚类算法DBSCAN(Density-Based Spatial Clustering of Applications with Noise)
 本文介绍基于密度的聚类算法，这类算法假定聚类结构能通过样本分布的紧密程度确定。  
 通常情况下，密度聚类算法从样本密度的角度来考察样本之间的可连接性，并给予可连接样本不断扩展聚类簇以获得最终的聚类结果。  
