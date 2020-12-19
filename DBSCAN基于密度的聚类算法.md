@@ -41,34 +41,62 @@ DBSCAN(具有噪声的基于密度的聚类方法)是其中一种基于密度的
 - 算法涉及两个参数：距离阈值 ϵ，邻域样本数阈值 MinPts。需要联合调参，不同的参数组合对最后的聚类效果有较大影响
 - 面对高维数据容易溢出，算起来慢（可以先做降维）
 - 该算法的运行速度要比 KMeans 算法慢一些
+- 某些样本点可能到两个核心对象的距离都小于 ϵ ，但是这两个核心对象由于不是密度直达，且不属于同一个聚类簇，DBSCAN算法会采用先来后到的方法来判定这些样本点属于哪个簇，所以这个算法存在一定的不稳定性  
+- 对于不是明显分离的簇，DBSCAN 可能会合并这些有重叠的簇，而 KMeans 倾向于区分开这些簇  
 >
-### 三. k值确定：
-#### (3.1) 个人需求/经验  
-比如，做客户分层，你想分成4部分，那么k值就取你想要的4。
+
+### 三. 举栗子：
+下面用sklearn的make_moons方法来生成 DBSCAN 聚类算法的测试数据：  
+```
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# @Author  : Hush
+# @Software: PyCharm
+
+import matplotlib.pyplot as plt
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+from sklearn import datasets
+from sklearn.cluster import KMeans
+from sklearn.cluster import DBSCAN
+
+X1, Y1 = datasets.make_moons(n_samples=5000, noise=0.07, random_state=678)
+plt.scatter(X1[:, 0], X1[:, 1], marker='o', c=Y1)
+plt.title('模拟数据')
+plt.show()
+```
+![](https://ftp.bmp.ovh/imgs/2020/12/ff4bd24fda9de5f6.png)  
 >
-#### (3.2) 手肘法Elbow method——看图辨别拐点   
+#### (3.1) 用 KMeans 聚类试试水
+```
+# 先用 KMeans 算法来分类
+y1_model = KMeans(n_clusters=2, random_state=666)
+y1_pred = y1_model.fit_predict(X1)
+plt.scatter(X1[:, 0], X1[:, 1], c=y1_pred)
+plt.show()
+```
+![](https://ftp.bmp.ovh/imgs/2020/12/91147fdefe45fdb6.png)  
+很明显，KMeans不能很好地聚类，下面看看DBSCAN的情况。
 
-- (3.2.1) SSE参数解释：  
-得很缓慢时，就认为进一步增大聚类数效果也聚类效果也没有太明显的变化。关注斜率最大处，一个明显的“肘点”就是最佳聚类数目。
-- (3.2.3) 举例SSE图表示：
-此时，选k=3。  
+#### (3.2) DBSCAN 聚类
+```
+# 现用 DBSCAN 算法来分类
+y2_model = DBSCAN(eps=0.5, min_samples=5, metric='euclidean')  # 都是默认参数，半径设0.5，Minpts=5,采用欧氏距离
+y2_pred = y2_model.fit_predict(X1)
+plt.scatter(X1[:, 0], X1[:, 1], c=y2_pred)
+plt.show()
+```
+![](https://ftp.bmp.ovh/imgs/2020/12/1947404f449dc50b.png)  
+修改一下参数，可以改eps，也可以改min_samples。这里改eps.  
+```
+#  DBSCAN 修改参数eps
+y2_model = DBSCAN(eps=0.1, min_samples=5, metric='euclidean')  # 都是默认参数，半径设0.5，Minpts=5,采用欧氏距离
+y2_pred = y2_model.fit_predict(X1)
+plt.scatter(X1[:, 0], X1[:, 1], c=y2_pred)
+plt.show()
+```
+![](https://ftp.bmp.ovh/imgs/2020/12/eb988f99937dbc39.png)  
 >
-#### (3.3) Gap statistic   
-
->
-#### (3.4) 轮廓系数Silhouette Coefficient
-
->
-#### (3.5) Calinski-Harabasz Index 即(CH)指标  
-
->
-### 四. 举栗子：
-下面用sklearn的make_blobs方法来生成聚类算法的测试数据：  
-
-(4.1) 手肘法
-
-
-
 参考资料：  
 西瓜书
 [B站视频](https://www.bilibili.com/video/BV1j4411H7xv?p=1)  
