@@ -76,30 +76,48 @@ plt.scatter(X1[:, 0], X1[:, 1], c=y1_pred)
 plt.show()
 ```
 ![](https://ftp.bmp.ovh/imgs/2020/12/91147fdefe45fdb6.png)  
-很明显，KMeans不能很好地聚类，下面看看DBSCAN的情况。
+很明显，KMeans更倾向于划分球类数据，对于非凸数据并不能很好地聚类，下面看看DBSCAN的情况。
 
 #### (3.2) DBSCAN 聚类
+#### (3.2.1) 使用默认参数
 ```
 # 现用 DBSCAN 算法来分类
-y2_model = DBSCAN(eps=0.5, min_samples=5, metric='euclidean')  # 都是默认参数，半径设0.5，Minpts=5,采用欧氏距离
+y2_model = DBSCAN(eps=0.5, min_samples=5, metric='euclidean')  # 首先使用默认参数，半径设0.5，Minpts=5,采用欧氏距离
 y2_pred = y2_model.fit_predict(X1)
 plt.scatter(X1[:, 0], X1[:, 1], c=y2_pred)
 plt.show()
 ```
 ![](https://ftp.bmp.ovh/imgs/2020/12/1947404f449dc50b.png)  
-修改一下参数，可以改eps，也可以改min_samples。这里改eps.  
+在当前默认参数设置下：半径设0.5，Minpts=5,采用欧氏距离，聚类只有一类。可以从两个方面考虑，一是减小半径 eps，二是增大 min_samples。
+接下来改 eps。  
+>
+#### (3.2.2) 调整参数
+##### (3.2.2.1) DBSCAN 修改参数eps
 ```
-#  DBSCAN 修改参数eps
-y2_model = DBSCAN(eps=0.1, min_samples=5, metric='euclidean')  # 都是默认参数，半径设0.5，Minpts=5,采用欧氏距离
+y2_model = DBSCAN(eps=0.2, min_samples=5, metric='euclidean')  # 半径减小到0.2，Minpts保持不变
+y2_pred = y2_model.fit_predict(X1)
+plt.scatter(X1[:, 0], X1[:, 1], c=y2_pred)
+plt.show()
+```
+![](https://ftp.bmp.ovh/imgs/2020/12/1947404f449dc50b.png)
+减小半径eps，但还是没有很好地分类，下面继续减小eps。  
+>
+##### (3.2.2.2) DBSCAN 继续修改参数eps
+```
+y2_model = DBSCAN(eps=0.1, min_samples=5, metric='euclidean')  # 半径减小到0.1，Minpts保持不变
 y2_pred = y2_model.fit_predict(X1)
 plt.scatter(X1[:, 0], X1[:, 1], c=y2_pred)
 plt.show()
 ```
 ![](https://ftp.bmp.ovh/imgs/2020/12/eb988f99937dbc39.png)  
+当半径减小到0.1，此时很好地将数据聚类，并且检测出异常点。  
+>
+#### (3.3) 总结：
+在实际应用中，找到合适的eps和Minpts组合是DBSCAN的难点。因为并不知道数据是凸还是非凸，不同的评判指标在面对不同的数据时效果是不一样的。  
 >
 参考资料：  
 西瓜书
-[B站视频](https://www.bilibili.com/video/BV1j4411H7xv?p=1)  
-大佬Blog,[(1)](https://www.cnblogs.com/pinard/p/6208966.html)、知乎多个回答
+[B站视频，比如](https://www.bilibili.com/video/BV1j4411H7xv?p=1)  
+大佬Blog,[(1)](https://www.cnblogs.com/pinard/p/6208966.html)  
 聚类效果可视化体验(某位外国大佬写的体验网站)[地址](https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/)  
 ![](https://ftp.bmp.ovh/imgs/2020/12/1187054a9d252826.png)  
