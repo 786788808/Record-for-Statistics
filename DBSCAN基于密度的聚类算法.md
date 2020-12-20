@@ -87,7 +87,7 @@ y2_pred = y2_model.fit_predict(X1)
 plt.scatter(X1[:, 0], X1[:, 1], c=y2_pred)
 plt.show()
 ```
-![](https://ftp.bmp.ovh/imgs/2020/12/1947404f449dc50b.png)  
+![](https://ftp.bmp.ovh/imgs/2020/12/1947404f449dc50b.png)    
 在当前默认参数设置下：半径设0.5，Minpts=5,采用欧氏距离，聚类只有一类。可以从两个方面考虑，一是减小半径 eps，二是增大 min_samples。
 接下来改 eps。  
 >
@@ -99,7 +99,7 @@ y2_pred = y2_model.fit_predict(X1)
 plt.scatter(X1[:, 0], X1[:, 1], c=y2_pred)
 plt.show()
 ```
-![](https://ftp.bmp.ovh/imgs/2020/12/1947404f449dc50b.png)
+![](https://ftp.bmp.ovh/imgs/2020/12/1947404f449dc50b.png)     
 减小半径eps，但还是没有很好地分类，下面继续减小eps。  
 >
 ##### (3.2.2.2) DBSCAN 继续修改参数eps
@@ -109,7 +109,7 @@ y2_pred = y2_model.fit_predict(X1)
 plt.scatter(X1[:, 0], X1[:, 1], c=y2_pred)
 plt.show()
 ```
-![](https://ftp.bmp.ovh/imgs/2020/12/eb988f99937dbc39.png)  
+![](https://ftp.bmp.ovh/imgs/2020/12/eb988f99937dbc39.png)    
 当半径减小到0.1，此时很好地将数据聚类，并且检测出异常点。  
 >
 #### (3.3) 总结：
@@ -117,7 +117,7 @@ plt.show()
 >
 参考资料：  
 西瓜书
-[B站视频，比如](https://www.bilibili.com/video/BV1j4411H7xv?p=1)  
-大佬Blog,[(1)](https://www.cnblogs.com/pinard/p/6208966.html)  
-聚类效果可视化体验(某位外国大佬写的体验网站)[地址](https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/)  
-高维情况下，欧式距离和余弦距离都失效[参考大佬文章](https://zhuanlan.zhihu.com/p/23471291)
+B站视频 [地址1](https://www.bilibili.com/video/BV1j4411H7xv?p=1)  
+大佬Blog [地址2](https://www.cnblogs.com/pinard/p/6208966.html)  
+聚类效果可视化体验(某位外国大佬写的体验网站)[地址3](https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/)  
+高维情况下，欧式距离和余弦距离都失效[地址4](https://zhuanlan.zhihu.com/p/23471291)
