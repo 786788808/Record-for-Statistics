@@ -67,7 +67,7 @@ class sklearn.svm.SVC(*, C=1.0, kernel='rbf', degree=3, gamma='scale', coef0=0.0
 - 使用对偶问题更易求解，当我们寻找带约束的最优化问题时，为了使问题变得易于处理，可以把目标函数和约束全部融入拉格朗日函数，再求解其对偶问题来寻找最优解
 - 可以自然引入核函数，进而推广到非线性分类问题
 
-### 四. 举栗子：
+### 五. 举栗子：
 #### (1) 调参策略： 
 ![](https://ftp.bmp.ovh/imgs/2020/12/f7a50568df39425b.png)  
 1. 对数据做归一化处理(包括训练集、测试集)(涉及或隐含距离计算的算法,KNN Means PCA也要)
@@ -86,22 +86,76 @@ class sklearn.svm.SVC(*, C=1.0, kernel='rbf', degree=3, gamma='scale', coef0=0.0
 - 当 C 比较小， γ比较小时，模型会变得简单，支持向量的个数会多，模型比较简单  
 
 #### (2) 实例：   
+数据集用经典的鸢尾花数据，没有缺失值，比较好处理：   
+```
+#=p!/us6r/bin/env python3
+# -*- coding: utf-8 -*-
+# @Author  : Hush
+# @Software: PyCharm
+
+import pandas as pd
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import classification_report
+
+iris = load_iris()
+# np.c_列拼接，np.r_行拼接
+iris_df = pd.DataFrame(np.c_[iris.data, iris.target], columns=iris.feature_names+['flower_type'])
+# print(iris_df.head(4))
+print('数据集大小：', iris_df.shape)
+print('缺失值数量\n', iris_df.isnull().sum())
+print('各类别数量：\n', pd.pivot_table(iris_df, index='flower_type', values='sepal length (cm)', aggfunc=len))
+```
+拿到数据后，一般要先describe等等看数据分布情况，数据量、了解是否有缺失、异常值、类别是否平衡等等。  
+![](https://imgchr.com/i/rIhIgS)
+![](https://imgchr.com/i/rI4SvF)  
+鸢尾花数据集比较小，没有缺失值，三个类别也均衡。  
+```
+# 先划分训练集、测试集
+X_train, X_test, Y_train, Y_test = train_test_split(iris_df.iloc[:, :4], iris_df.iloc[:, -1],
+                                                    train_size=0.75, random_state=666)
+print('训练集大小：', X_train.shape)
+print('训练集的各类别数量:\n', Y_train.value_counts())
+```
+![](https://imgchr.com/i/rI42MF)
+```
+scaled_X_train = StandardScaler().fit_transform(X_train)
+param = {'kernel': ['rbf'], 'C':[0.01, 0.1, 1, 10, 100, 1000], 'gamma':[0.01, 0.1, 1, 10, 100, 1000]}
+grid_search = GridSearchCV(estimator=SVC(class_weight='balanced', decision_function_shape='ovo'),
+                           param_grid=param, cv=10)  # class_weight用'balanced'自动计算样本比例，decision_function_shape用'ovo'效果一般比较好，其余参数交给算法去测试得分
+grid_search.fit(scaled_X_train, Y_train)
+best_params = grid_search.best_params_  # 得出最佳参数组合
+best_score = grid_search.best_score_  # 得出最佳得分
+print('各参数组合得分\n', grid_search.cv_results_['mean_test_score'])  # 得出不同参数组合下10折的一个平均得分，直接用cv_results_可以看出每一折的得分
+print('最佳参数及最高分数', best_params)
+print('最高分数：%s' % format(best_score, '.3f'))
+```
+![](https://imgchr.com/i/rIqRED)
+```
+y_pred_1 = grid_search.predict(scaled_X_train)  # 预测训练集的结果
+y_true_1 = Y_train
+print('训练集的混淆矩阵\n', classification_report(y_true_1, y_pred_1, target_names=iris.target_names))  # 放到混淆矩阵看预测效果
+```
+![](https://imgchr.com/i/rIqHDf)
+```
+print('***********'*5)
+print('看看模型在测试集的泛化能力：\n')
+scaled_X_test = StandardScaler().fit_transform(X_test)
+y_pred_2 = grid_search.predict(scaled_X_test)
+y_true_2 = Y_test
+print('测试集的混淆矩阵\n', classification_report(y_true_2, y_pred_2, target_names=iris.target_names))
+
+```
+![](https://imgchr.com/i/rIqOUg)
+从测试集效果来看，该模型还是不错的。     
+150的数据量还是比较小的，可以在大数据集里看看效果。当然，SVM 对超大型数据的处理能力是明显不足的，计算复杂，耗时较久。如果是中小型数据还是可以考虑用 SVM 的，虽然集成学习已经很优秀了，但是这个算法的理论基础还是比较强的。    
+对于该算法的理论掌握还不够，后期还需要好好学习一下。  
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-参考资料：  
+参考资料：    
 [刘建平的支持向量机系列文章](https://www.cnblogs.com/pinard/p/6117515.html)
