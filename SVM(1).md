@@ -69,6 +69,7 @@ class sklearn.svm.SVC(*, C=1.0, kernel='rbf', degree=3, gamma='scale', coef0=0.0
 
 ### 五. 举栗子：
 #### (1) 调参策略： 
+下图为求解的原始形式和对偶化后的情况：    
 ![](https://ftp.bmp.ovh/imgs/2020/12/f7a50568df39425b.png)  
 1. 对数据做归一化处理(包括训练集、测试集)(涉及或隐含距离计算的算法,KNN Means PCA也要)
 2. 可以应用交叉验证和网格搜索来调参，GridSearchCV 结合两者来调最佳惩罚系数 C 和 gamma γ，方便省事（但是，在面对大数据集和多参数的情况下，非常耗时）      
@@ -76,10 +77,11 @@ class sklearn.svm.SVC(*, C=1.0, kernel='rbf', degree=3, gamma='scale', coef0=0.0
 >   
 以高斯核 RBF 为例，因为经常遇到的情况是不知道数据是否线性可分，而且多项式核和 sigmod  需要调的超参数比较多，所以没头绪的时候用RBF
 需要调整两个超参数：  
-**惩罚系数C**: **当 C 比较大时**，会考虑更多的离群点，模型会有比较少的支持向量，模型会变得复杂，**容易过拟合**。   
-**核函数系数 gamma γ**:    
-核函数K(x,z)=exp(−γ||x−z||^2)，(γ>0，需要自己调参)，γ主要定义了单个样本对整个分类超平面的影响。        
-**当γ比较大时**，整个模型的支持向量也会少，模型会变得更复杂，**容易过拟合**。     
+- **惩罚系数C**: 
+> **当 C 比较大时**，会考虑更多的离群点，模型会有比较少的支持向量，模型会变得复杂，**容易过拟合**。   
+- **核函数系数 gamma γ**:    
+> 核函数K(x,z)=exp(−γ||x−z||^2)，(γ>0，需要自己调参)，γ主要定义了单个样本对整个分类超平面的影响。        
+> **当γ比较大时**，整个模型的支持向量也会少，模型会变得更复杂，**容易过拟合**。     
 >
 综上:      
 - 当 C 比较大， γ比较大时，模型的支持向量较少，模型比较复杂，容易过拟合    
@@ -88,7 +90,7 @@ class sklearn.svm.SVC(*, C=1.0, kernel='rbf', degree=3, gamma='scale', coef0=0.0
 #### (2) 实例：   
 数据集用经典的鸢尾花数据，没有缺失值，比较好处理：   
 ```
-#=p!/us6r/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # @Author  : Hush
 # @Software: PyCharm
@@ -111,8 +113,8 @@ print('缺失值数量\n', iris_df.isnull().sum())
 print('各类别数量：\n', pd.pivot_table(iris_df, index='flower_type', values='sepal length (cm)', aggfunc=len))
 ```
 拿到数据后，一般要先describe等等看数据分布情况，数据量、了解是否有缺失、异常值、类别是否平衡等等。  
-![](https://imgchr.com/i/rIhIgS)
-![](https://imgchr.com/i/rI4SvF)  
+[![rIhIgS.png](https://s3.ax1x.com/2020/12/27/rIhIgS.png)](https://imgchr.com/i/rIhIgS)
+[![rI4SvF.png](https://s3.ax1x.com/2020/12/27/rI4SvF.png)](https://imgchr.com/i/rI4SvF)  
 鸢尾花数据集比较小，没有缺失值，三个类别也均衡。  
 ```
 # 先划分训练集、测试集
@@ -121,7 +123,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(iris_df.iloc[:, :4], iris_df
 print('训练集大小：', X_train.shape)
 print('训练集的各类别数量:\n', Y_train.value_counts())
 ```
-![](https://imgchr.com/i/rI42MF)
+[![rI42MF.png](https://s3.ax1x.com/2020/12/27/rI42MF.png)](https://imgchr.com/i/rI42MF)
 ```
 scaled_X_train = StandardScaler().fit_transform(X_train)
 param = {'kernel': ['rbf'], 'C':[0.01, 0.1, 1, 10, 100, 1000], 'gamma':[0.01, 0.1, 1, 10, 100, 1000]}
@@ -134,13 +136,13 @@ print('各参数组合得分\n', grid_search.cv_results_['mean_test_score'])  # 
 print('最佳参数及最高分数', best_params)
 print('最高分数：%s' % format(best_score, '.3f'))
 ```
-![](https://imgchr.com/i/rIqRED)
+[![rIqRED.png](https://s3.ax1x.com/2020/12/28/rIqRED.png)](https://imgchr.com/i/rIqRED)
 ```
 y_pred_1 = grid_search.predict(scaled_X_train)  # 预测训练集的结果
 y_true_1 = Y_train
 print('训练集的混淆矩阵\n', classification_report(y_true_1, y_pred_1, target_names=iris.target_names))  # 放到混淆矩阵看预测效果
 ```
-![](https://imgchr.com/i/rIqHDf)
+[![rIqHDf.png](https://s3.ax1x.com/2020/12/28/rIqHDf.png)](https://imgchr.com/i/rIqHDf)
 ```
 print('***********'*5)
 print('看看模型在测试集的泛化能力：\n')
@@ -150,7 +152,7 @@ y_true_2 = Y_test
 print('测试集的混淆矩阵\n', classification_report(y_true_2, y_pred_2, target_names=iris.target_names))
 
 ```
-![](https://imgchr.com/i/rIqOUg)
+[![rIqOUg.png](https://s3.ax1x.com/2020/12/28/rIqOUg.png)](https://imgchr.com/i/rIqOUg)   
 从测试集效果来看，该模型还是不错的。     
 150的数据量还是比较小的，可以在大数据集里看看效果。当然，SVM 对超大型数据的处理能力是明显不足的，计算复杂，耗时较久。如果是中小型数据还是可以考虑用 SVM 的，虽然集成学习已经很优秀了，但是这个算法的理论基础还是比较强的。    
 对于该算法的理论掌握还不够，后期还需要好好学习一下。  
