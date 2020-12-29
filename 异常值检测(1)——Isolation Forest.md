@@ -17,12 +17,13 @@
 "异常值"的两个假设：
 > (1) 异常数据跟样本中大多数样本不太一样(疏离程度)(different)    
 > (2) 异常数据在整体数据样本中占比少(few)    
+>
 异常值定义：   
 > 容易被孤立的点 (more likely to be separated)，满足以下条件：a.分布稀疏 b.离密度高的群体较远。       
 > 在特征空间里，分布稀疏的区域表示事件发生在该区域的概率很低，因而可以认为落在这些区域里的数据是异常的。    
 
 #### (2.1) 算法思想：  
-给定训练数据 X={x1, x2, …, xn},有 n 个样本点，数据维度为 d ，下面会用到多个 Isolation Tree 不断划分样本点。  
+给定训练数据 X={x1, x2, …, xn}, 有 n 个样本点，数据维度为 d ，下面会用到多个 Isolation Tree 不断划分样本点。  
 首先，算法随机地抽取某一特征A，并在该特征中随机选择一个值a，将样本划分为左右两个分支(大于等于a的在左支，小于a的在右支)  
 然后，不断在每个分支重复上述步骤
 直到(满足以下条件之一)：
@@ -40,10 +41,10 @@
 如果训练样本中异常值较多，会违背算法的基本假设，导致检测效果不好
 
 #### (2.3) 举栗子：  
-[sklearn用法:](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html#sklearn.ensemble.IsolationForest)
-参数:
+[sklearn用法:](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html#sklearn.ensemble.IsolationForest)  
+参数:  
 Isolation Forest 算法主要有两个参数：一个是二叉树的数量；另一个是训练单棵 iTree 时候抽取样本的数目。实验表明，当设定为 100
-棵树，抽样样本数为 256 条时候，IF 在大多数情况下就已经可以取得不错的效果。这也体现了算法的简单、高效。
+棵树，抽样样本数为 256 条时候，IF 在大多数情况下就已经可以取得不错的效果。这也体现了算法的简单、高效。  
 - n_estimators: int, 默认值100。基学习器的数量，即算法中，树的数量。
 - max_samples： 'auto', int or float, default='auto'。最大样本数量，即训练每个基学习器的样本的数量。(论文提到采样大小超过256效果就提升不大了，并且越大还会造成计算时间上的浪费)  
 > If int, then draw max_samples samples.    
