@@ -15,11 +15,11 @@
 ### 二. 方法一：Isolation Forest 算法
 是一种适用于**连续型数据**的**无监督**异常检测方法，主要是利用集成学习的思路来做异常点检测，具有线性时间复杂度，且精准度较高，在处理大数据时速度快，在业界应用广泛。       
 "异常值"的两个假设：
-> (1) 异常数据跟样本中大多数样本不太一样(疏离程度)(different)  
-> (2) 异常数据在整体数据样本中占比少(few)  
+> (1) 异常数据跟样本中大多数样本不太一样(疏离程度)(different)    
+> (2) 异常数据在整体数据样本中占比少(few)    
 异常值定义：   
-> 容易被孤立的点 (more likely to be separated)，满足以下条件：a.分布稀疏 b.离密度高的群体较远。   
-> 在特征空间里，分布稀疏的区域表示事件发生在该区域的概率很低，因而可以认为落在这些区域里的数据是异常的。  
+> 容易被孤立的点 (more likely to be separated)，满足以下条件：a.分布稀疏 b.离密度高的群体较远。       
+> 在特征空间里，分布稀疏的区域表示事件发生在该区域的概率很低，因而可以认为落在这些区域里的数据是异常的。    
 
 #### (2.1) 算法思想：  
 给定训练数据 X={x1, x2, …, xn},有 n 个样本点，数据维度为 d ，下面会用到多个 Isolation Tree 不断划分样本点。  
@@ -45,12 +45,12 @@
 Isolation Forest 算法主要有两个参数：一个是二叉树的数量；另一个是训练单棵 iTree 时候抽取样本的数目。实验表明，当设定为 100
 棵树，抽样样本数为 256 条时候，IF 在大多数情况下就已经可以取得不错的效果。这也体现了算法的简单、高效。
 - n_estimators: int, 默认值100。基学习器的数量，即算法中，树的数量。
-- max_samples： 'auto', int or float, default='auto'。最大样本数量，即训练每个基学习器的样本的数量。(论文提到采样大小超过256效果就提升不大了，并且越大还会造成计算时间上的浪费)
-> If int, then draw max_samples samples.
-> If float, then draw max_samples * X.shape[0] samples.
-> If 'auto', then max_samples=min(256, n_samples).
->> If max_samples is larger than the number of samples provided, all samples will be used for all trees (no sampling).
-- contamination: 'auto' or  float, default=’auto’。数据污染问题，表示数据集中异常值的期望比例或者说是异常值的比例阈值。
+- max_samples： 'auto', int or float, default='auto'。最大样本数量，即训练每个基学习器的样本的数量。(论文提到采样大小超过256效果就提升不大了，并且越大还会造成计算时间上的浪费)  
+> If int, then draw max_samples samples.    
+> If float, then draw max_samples * X.shape[0] samples.    
+> If 'auto', then max_samples=min(256, n_samples).  
+>> If max_samples is larger than the number of samples provided, all samples will be used for all trees (no sampling).  
+- contamination: 'auto' or  float, default=’auto’。数据污染问题，表示数据集中异常值的期望比例或者说是异常值的比例阈值。  
 - random_state: 可设置复现
 >
 Methods:  
