@@ -66,6 +66,18 @@ SelectKBest(lambda X, Y: array(map(lambda x:mic(x, Y), X.T)).T, k=2).fit_transfo
 ```
 >
 #### 3.2 包装法（Wrapper）
+Wrapper 会根据一个目标函数来逐步筛选特征，其中，最常用的方法是递归消除特征法RFE (recursive feature elimination)。  
+RFE 首先选择一个机器学习模型，将n维特征和目标值加入训练，一轮训练后，消除权值系数较低的特征。  
+接着，在剩下的特征里，继续新一轮训练，不断剔除权值系数的特征。  
+直到，剩下的特征数满足需求，停止训练。  
+```
+from sklearn.feature_selection import RFE
+from sklearn.linear_model import LogisticRegression
+
+# estimator指定基模型器，这里用LogisticRegression；n_features_to_select 指定保留特征个数
+RFE(estimator=LogisticRegression(), n_features_to_select=3).fit_transform(X_train, Y_train) 
+```
+
 #### 3.3 嵌入法（Embedding) 
 
 
