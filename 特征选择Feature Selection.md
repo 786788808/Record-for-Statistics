@@ -16,7 +16,7 @@
 >
 ### 三. 各方法介绍(特征选择的形式)：
 #### 3.1 过滤法（Filter）
-#### 3.1.1 方差法
+##### 3.1.1 方差法
 计算所有特征的方差，然后设定一个阈值，只有特征的方差大于这个阈值时，才会被保留下来。   
 返回值为特征选择后的数据    
 ```
@@ -25,12 +25,14 @@ from sklearn.feature_selection import VarianceThreshold
 VarianceThreshold(threshold=4).fit_transform(X_train)  # threshold指定阈值大小；也可以先 fit() 再 transform()
 ```
 >
-#### 3.1.2 相关系数法
+##### 3.1.2 相关系数法
 计算每个特征与目标值的相关系数(线性相关)，同上，设定一个阈值，只有相应的相关系数大于这个阈值，才会被保留下来。
 注意，只有连续型变量才能计算这个值。  
+缺陷：如果特征与目标值存在很强的非线性关系，相关系数也检测不出来。  
 返回值为特征选择后的数据    
 用SelectKBest,指定参数k，表明返回最好的k个特征
 ```
+
 from sklearn.feature_selection import SelectKBest
 from scipy.stats import pearsonr
 
@@ -38,7 +40,7 @@ from scipy.stats import pearsonr
 SelectKBest(lambda X, Y: array(map(lambda x:pearsonr(x, Y), X.T)).T, k=2).fit_transform(X_train, Y_train)
 ```
 >
-#### 3.1.3 卡方检验
+##### 3.1.3 卡方检验
 卡方检验可以检验某个特征分布和目标值分布之间的相关性，然后给定卡方值阈值，只有卡方值大于这个阈值才会被保留  
 选择 k 个最好的特征，返回值为特征选择后的数据    
 ```
@@ -49,7 +51,7 @@ from sklearn.feature_selection import chi2
 SelectKBest(chi2, k=2).fit_transform(X_train, Y_train)
 ```
 >
-#### 3.1.4 互信息法
+##### 3.1.4 互信息法
 互信息值(信息增益)越大，说明特征和目标值之间的相关性越大，越需要保留
 选择 k 个最好的特征，返回值为特征选择后的数据    
 ```
@@ -79,8 +81,26 @@ RFE(estimator=LogisticRegression(), n_features_to_select=3).fit_transform(X_trai
 ```
 
 #### 3.3 嵌入法（Embedding) 
+嵌入法也使用到机器学习模型，但是他是考虑所有特征，而不像包装法逐步剔除不重要的特征    
+可以使用L1、L2正则化来选择特征，也可以选择决策树、GBDT这类树模型来选择特征   
+有些机器学习方法本身就具有对特征进行打分的机制，或者很容易将其运用到特征选择任务中，例如回归模型，SVM，决策树，随机森林等等
+
+##### 3.3.1 基于树模型的特征选择法　　
 
 
+
+
+>
+
+##### 3.3.2 基于树模型的特征选择法　　
+树模型中GBDT也可用来作为基模型进行特征选择，使用feature_selection库的SelectFromModel类结合GBDT模型，来选择特征的代码如下：
+```
+from sklearn.feature_selection import SelectFromModel
+from sklearn.ensemble import GradientBoostingClassifier
+
+#GBDT作为基模型的特征选择
+SelectFromModel(GradientBoostingClassifier()).fit_transform(iris.data, iris.target)
+```
 
 
 
