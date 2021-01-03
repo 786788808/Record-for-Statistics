@@ -53,7 +53,9 @@ SelectKBest(chi2, k=2).fit_transform(X_train, Y_train)
 ```
 >
 ##### 3.1.4 互信息法
+MIC 即：Maximal Information Coefficient 最大互信息系数
 互信息值(信息增益)越大，说明特征和目标值之间的相关性越大，越需要保留
+MIC可以用来衡量线性或非线性的相互关系
 选择 k 个最好的特征，返回值为特征选择后的数据    
 ```
 from sklearn.feature_selection import SelectKBest
@@ -84,13 +86,20 @@ RFE(estimator=LogisticRegression(), n_features_to_select=3).fit_transform(X_trai
 #### 3.3 嵌入法（Embedding) 
 嵌入法也使用到机器学习模型，但是他是考虑所有特征，而不像包装法逐步剔除不重要的特征    
 可以使用 L1、L2 正则化来选择特征，也可以选择决策树、GBDT 这类树模型来选择特征   
-有些机器学习方法本身就具有对特征进行打分的机制，或者很容易将其运用到特征选择任务中，例如回归模型，SVM，决策树，随机森林等等
+一般，可以得到**特征系数coef** 或者可以得到**特征重要度(feature importances)** 的算法才可做为嵌入法的基学习器
+对于部分机器学习算法，其本身就具有对特征进行打分的机制，或者很容易将其运用到特征选择任务中，例如回归模型，SVM，决策树，随机森林等等
 
 ##### 3.3.1 基于惩罚项的特征选择法
+下面选择逻辑回归和L1惩罚:  
+```
+from sklearn.feature_selection import SelectFromModel
+from sklearn.linear_model import LogisticRegression
 
-
-
-
+#带L1惩罚项的逻辑回归作为基模型的特征选择
+SelectFromModel(LogisticRegression(penalty='l1', C=0.1)).fit_transform(X_train, Y_train)
+```
+还有SVM的svm.LinearSVC可以作为基模型，根据情况使用。  
+对于SVM和逻辑回归，参数C控制稀疏性：C越小，被选中的特征越少。对于Lasso，参数alpha越大，被选中的特征越少。  
 >
 
 ##### 3.3.2 基于树模型的特征选择法　　
@@ -103,5 +112,6 @@ from sklearn.ensemble import GradientBoostingClassifier
 SelectFromModel(GradientBoostingClassifier()).fit_transform(iris.data, iris.target)
 ```
 
+除了剔除特征，还可以构建新的特征，比如：特征相加、特征相减、相乘、相除，平方，立方等等，在一些比赛里，大神都会构建一些新的特征，所以在平时建模，也可以多去尝试新的模型，不仅仅基于现有的特征。  
 
 
