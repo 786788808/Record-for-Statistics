@@ -115,3 +115,4 @@ SelectFromModel(GradientBoostingClassifier()).fit_transform(iris.data, iris.targ
 除了剔除特征，还可以构建新的特征，比如：特征相加、特征相减、相乘、相除，平方，立方等等，在一些比赛里，大神都会构建一些新的特征，所以在平时建模，也可以多去尝试新的模型，不仅仅基于现有的特征。  
 
 
+
