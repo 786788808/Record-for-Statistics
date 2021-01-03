@@ -48,7 +48,6 @@ SelectKBest(lambda X, Y: array(map(lambda x:pearsonr(x, Y), X.T)).T, k=2).fit_tr
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 
-#选择K个最好的特征，返回选择特征后的数据
 SelectKBest(chi2, k=2).fit_transform(X_train, Y_train)
 ```
 >
@@ -61,7 +60,6 @@ MIC可以用来衡量线性或非线性的相互关系
 from sklearn.feature_selection import SelectKBest
 from minepy import MINE
  
- #由于MINE的设计不是函数式的，定义mic方法将其为函数式的，返回一个二元组，二元组的第2项设置成固定的P值0.5
  def mic(x, y):
      m = MINE()
      m.compute_score(x, y)
@@ -95,7 +93,6 @@ RFE(estimator=LogisticRegression(), n_features_to_select=3).fit_transform(X_trai
 from sklearn.feature_selection import SelectFromModel
 from sklearn.linear_model import LogisticRegression
 
-#带L1惩罚项的逻辑回归作为基模型的特征选择
 SelectFromModel(LogisticRegression(penalty='l1', C=0.1)).fit_transform(X_train, Y_train)
 ```
 还有SVM的svm.LinearSVC可以作为基模型，根据情况使用。  
@@ -108,7 +105,6 @@ SelectFromModel(LogisticRegression(penalty='l1', C=0.1)).fit_transform(X_train, 
 from sklearn.feature_selection import SelectFromModel
 from sklearn.ensemble import GradientBoostingClassifier
 
-#GBDT作为基模型的特征选择
 SelectFromModel(GradientBoostingClassifier()).fit_transform(iris.data, iris.target)
 ```
 
