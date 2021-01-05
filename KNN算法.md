@@ -1,6 +1,6 @@
 K近邻法(KNN)是一种很基本的机器学习算法，属于监督学习类算法，是一种简单易懂的方法，可用于回归和分类。比如我们要给点 A 做预测，做**分类**的时候，我们经常采用**少数服从多数**原则，A点最近的 K 个点属于哪个类最多，A点就属于那个类；做**回归**的时候，一般采用附近K个点的**平均值**作为A点的回归值。    
 很多人会把 KNN 与 KMeans 混合，记住 KNN：K 是指附近的 K 个点，有分类标签；KMeans：K 是指分成 K 类，无分类标签。  
-
+![](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Ffjmingfeng.com%2Fimg%2F0%2F0493698851%2F62%2Fdf825ad2a346cfb0be0a689aaed1f6ad%2F2374481702%2F6636934043.jpg&refer=http%3A%2F%2Ffjmingfeng.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1612425698&t=0161a3c28d1e55bbc8318901e40c6501)  
 ### 一. KNN 原理
 #### (1.1) 基本步骤：
 简单来说，就是当预测一个数据点 A 的时候，根据它距离最近的 K 个点是什么类别来判断 x 属于哪个类别。    
@@ -44,9 +44,9 @@ K值过大或过小，模型的泛化能力终将不好。
 
 #### (2.3) 球树
 
+这部分暂时省略，为了提高效率，推出 KD 树、球树，如果数据量大，建议试试。  
+详细可参考大神博客：https://www.cnblogs.com/pinard/p/6061661.html
 
-
- 
 ### 三. 优缺点： 
 KNN 算法中，我们不需要对数据分布做任何假设。其次，这是一个惰性算法，拿逻辑回归来说，逻辑回归需要训练再到预测，而 KNN 算法拿到数据后，基本没有训练一说，做预测的时候才开始算。  
 KNN 相对其他算法，较易入门，相比SVM算法，这不要太简单了。  苍天啊！  
@@ -145,4 +145,6 @@ best_knn.fit(x_train_scaled, y_train)
 x_test_scaled = scale.fit_transform(x_test)
 print(best_knn.score(x_test_scaled, y_test))	# 看看评分
 ```
-![](https://ftp.bmp.ovh/imgs/2021/01/ce9ddc747d2d76cc.png)  
+![](https://ftp.bmp.ovh/imgs/2021/01/ce9ddc747d2d76cc.png)    
+
+注意: KNN需要做好归一化处理，因为要计算距离，很多数据集里，如果漏掉这一步，一步错步步错  
