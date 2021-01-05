@@ -100,5 +100,49 @@ Parameters:
 > 指定多少个CPU进行运算，None表示1， 设置为-1表示使用所有处理器。主要影响运算速度，不影响算法本身。  
 
 ### 五. 举个例子：
+拿鸢尾花数据来做个简单例子:  
+```
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# @Author  : Hush
+# @Software: PyCharm
 
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import cross_val_score
+import matplotlib.pyplot as plt
+plt.rcParams['font.sans-serif'] = ['FangSong']
 
+iris = load_iris()
+X = iris.data
+Y = iris.target
+x_train, x_test, y_train, y_test = train_test_split(X, Y, train_size=0.75, random_state=666)
+scale = StandardScaler()
+x_train_scaled = scale.fit_transform(x_train)
+
+k_list = range(1, 31)
+k_error = []
+for k in k_list:
+    knn_model = KNeighborsClassifier(n_neighbors=k)
+    scores = cross_val_score(knn_model, x_train_scaled, y_train, cv=6, scoring='accuracy')
+    # print(scores)
+    k_error.append(scores.mean())
+
+# 从图挑出最佳K值
+plt.plot(k_list, k_error)
+plt.xlabel('K 值')
+plt.ylabel('Accuracy')
+plt.show()
+```
+![](https://ftp.bmp.ovh/imgs/2021/01/eafa27347de7f14a.png)  
+由图看到，当 k = 11时，准确率最高。  
+下面将K设置为11：  
+```
+best_knn = KNeighborsClassifier(n_neighbors=11)	
+best_knn.fit(x_train_scaled, y_train)			
+x_test_scaled = scale.fit_transform(x_test)
+print(best_knn.score(x_test_scaled, y_test))	# 看看评分
+```
+![](https://ftp.bmp.ovh/imgs/2021/01/ce9ddc747d2d76cc.png)  
