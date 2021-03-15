@@ -27,3 +27,13 @@ LDA 的目标可以理解为：投影后类内方差最小，类间方差最大�
 
 
 ### 三. sklearn 用法
+```
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+import matplotlib.pyplot as plt
+
+lda = LinearDiscriminantAnalysis(n_components=2)
+lda.fit(X,Y)
+X_lda = lda.transform(X)
+plt.scatter(X_lda[:, 0], X_lda[:, 1],marker='o',c=Y)
+plt.show()
+```
