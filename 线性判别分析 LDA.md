@@ -27,6 +27,7 @@ LDA 的目标可以理解为：投影后类内方差最小，类间方差最大�
 
 
 ### 三. sklearn 用法
+用鸢尾花数据：  
 ```
 from sklearn import datasets
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
@@ -42,3 +43,10 @@ X_lda = lda.transform(X)
 plt.scatter(X_lda[:, 0], X_lda[:, 1],marker='o',c=Y)
 plt.show()
 ```
+输出：  
+![](https://ae04.alicdn.com/kf/U1c325be9d8344ce19e949c889b51b97bU.jpg)
+
+参考资料：  
+https://www.zhihu.com/question/35666712  
+https://zhuanlan.zhihu.com/p/271917978  
+https://www.cnblogs.com/pinard/p/6244265.html  
