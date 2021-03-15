@@ -75,3 +75,4 @@ print('方差：', pca_2.explained_variance_)
 https://blog.csdn.net/program_developer/article/details/80632779  
 https://www.zhihu.com/question/41120789?sort=created  
 
+
