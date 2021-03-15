@@ -35,7 +35,8 @@ PCA 要找一组相互正交的坐标轴，来表示原有的特征。
 >
 
 ### 二. 算法优缺点：
->#### 2.1 优点：  
+
+#### 2.1 优点：  
 - 缓解维度灾难带来的问题(对于涉及计算距离的算法，降维让距离更有实际意义；减少计算开销)  
 - 各主成分之间正交，互不相干，可解决原有数据的特征相关问题  
 - 降低噪声影响。小特征值对应的特征向量往往与噪声有关，舍弃它们舍弃在一定程度上起到降噪的作用  
@@ -66,6 +67,9 @@ pca_2.fit(X)
 print('解释方法比例：', pca_2.explained_variance_ratio_)
 print('方差：', pca_2.explained_variance_)
 ```
+![](https://sc01.alicdn.com/kf/U82a3f027e6c94431b3a20aeaa96d547bh.jpg)  
+
+>
 资料参考：  
 [刘建平blog](https://www.cnblogs.com/pinard/p/6239403.html)  
 https://blog.csdn.net/program_developer/article/details/80632779  
