@@ -48,6 +48,7 @@ PCA 要找一组相互正交的坐标轴，来表示原有的特征。
 >
 ### 三. sklearn用法
 用鸢尾花数据集做示例：  
+可设置参数，第一种设置保留主成分个数，第二种设置方差解释百分比：    
 ```
 from sklearn.decomposition import PCA
 from sklearn import datasets
